@@ -38,7 +38,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" style="-fx-background-color: #f0f0f0;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainForm">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="500.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="500.0" />
@@ -62,7 +62,7 @@
             <Insets left="30.0" />
          </GridPane.margin>
       </Rectangle>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" style="-fx-background-color: #f0f0f0;" GridPane.rowIndex="1">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" GridPane.rowIndex="1">
          <children>
             <TableView layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
               <columns>
@@ -77,8 +77,8 @@
                   <Font name="System Bold" size="14.0" />
                </font></Label>
             <TextField layoutX="249.0" layoutY="1.0" promptText="Search by Part ID or Name" />
-            <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" text="Modify" />
+            <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddPart" text="Add" />
+            <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyPart" text="Modify" />
             <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" text="Delete" />
          </children>
          <GridPane.margin>
@@ -90,7 +90,7 @@
             <Insets left="20.0" />
          </GridPane.margin>
       </Rectangle>
-      <AnchorPane layoutX="45.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" style="-fx-background-color: #f0f0f0;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <AnchorPane layoutX="45.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <TableView layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
                <columns>
@@ -105,8 +105,8 @@
                   <Font name="System Bold" size="14.0" />
                </font></Label>
             <TextField layoutX="249.0" layoutY="1.0" promptText="Search by Product ID or Name" />
-            <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" text="Modify" />
+            <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddProduct" text="Add" />
+            <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyProduct" text="Modify" />
             <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" text="Delete" />
          </children>
          <GridPane.margin>
