@@ -15,12 +15,12 @@ public class Inventory {
         allProducts.add(product);
     }
 
-    public static void deletePart(Part part) {
-        allParts.remove(part);
+    public static boolean deletePart(Part part) {
+        return allParts.remove(part);
     }
 
-    public static void deleteProduct(Product product) {
-        allProducts.remove(product);
+    public static boolean deleteProduct(Product product) {
+        return allProducts.remove(product);
     }
 
     public static ObservableList<Part> getAllParts() {
