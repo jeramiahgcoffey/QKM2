@@ -79,7 +79,7 @@
             <TextField layoutX="249.0" layoutY="1.0" promptText="Search by Part ID or Name" />
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddPart" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyPart" text="Modify" />
-            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" text="Delete" />
+            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
          </children>
          <GridPane.margin>
             <Insets left="35.0" />
@@ -107,7 +107,7 @@
             <TextField layoutX="249.0" layoutY="1.0" promptText="Search by Product ID or Name" />
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddProduct" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyProduct" text="Modify" />
-            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" text="Delete" />
+            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
          </children>
          <GridPane.margin>
             <Insets left="25.0" />

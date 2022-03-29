@@ -15,6 +15,14 @@ public class Inventory {
         allProducts.add(product);
     }
 
+    public static void deletePart(Part part) {
+        allParts.remove(part);
+    }
+
+    public static void deleteProduct(Product product) {
+        allProducts.remove(product);
+    }
+
     public static ObservableList<Part> getAllParts() {
         return allParts;
     }

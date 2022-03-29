@@ -74,10 +74,11 @@ public class Product {
         associatedParts.add(part);
     }
 
-//    Implement deleteAssociatedPart
+    public boolean deleteAssociatedPart(Part part) {
+        return associatedParts.remove(part);
+    }
 
-
-    public ObservableList<Part> getAssociatedParts() {
+    public ObservableList<Part> getAllAssociatedParts() {
         return associatedParts;
     }
 }

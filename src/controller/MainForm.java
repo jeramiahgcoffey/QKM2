@@ -20,35 +20,16 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainForm implements Initializable {
-    @FXML
-    private TableView<Part> partsTable;
-
-    @FXML
-    private TableView<Product> productsTable;
-
-    @FXML
-    private TableColumn partIdColumn;
-
-    @FXML
-    private TableColumn partNameColumn;
-
-    @FXML
-    private TableColumn partInventoryLevelColumn;
-
-    @FXML
-    private TableColumn partPriceColumn;
-
-    @FXML
-    private TableColumn productIdColumn;
-
-    @FXML
-    private TableColumn productNameColumn;
-
-    @FXML
-    private TableColumn productInventoryLevelColumn;
-
-    @FXML
-    private TableColumn productPriceColumn;
+    public TableView partsTable;
+    public TableView productsTable;
+    public TableColumn partIdColumn;
+    public TableColumn partNameColumn;
+    public TableColumn partInventoryLevelColumn;
+    public TableColumn partPriceColumn;
+    public TableColumn productIdColumn;
+    public TableColumn productNameColumn;
+    public TableColumn productInventoryLevelColumn;
+    public TableColumn productPriceColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -64,6 +45,18 @@ public class MainForm implements Initializable {
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInventoryLevelColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+    }
+
+    public void onDeletePart() {
+        Part selectedPart = (Part) partsTable.getSelectionModel().getSelectedItem();
+        if (selectedPart == null) { return; }
+        Inventory.deletePart(selectedPart);
+    }
+
+    public void onDeleteProduct() {
+        Product selectedProduct = (Product) productsTable.getSelectionModel().getSelectedItem();
+        if (selectedProduct == null) { return; }
+        Inventory.deleteProduct(selectedProduct);
     }
 
     public void toAddPart(ActionEvent actionEvent) throws IOException {
@@ -97,7 +90,5 @@ public class MainForm implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
-
-
 
 }
