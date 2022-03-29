@@ -64,12 +64,12 @@
       </Rectangle>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" GridPane.rowIndex="1">
          <children>
-            <TableView layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
+            <TableView fx:id="partsTable" layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Part ID" />
-                <TableColumn prefWidth="75.0" text="Part Name" />
-                  <TableColumn prefWidth="104.0" text="Inventory Level" />
-                  <TableColumn prefWidth="179.0" text="Price / Cost per Unit" />
+                <TableColumn fx:id="partIdColumn" prefWidth="75.0" text="Part ID" />
+                <TableColumn fx:id="partNameColumn" prefWidth="75.0" text="Part Name" />
+                  <TableColumn fx:id="partInventoryLevelColumn" prefWidth="104.0" text="Inventory Level" />
+                  <TableColumn fx:id="partPriceColumn" prefWidth="179.0" text="Price / Cost per Unit" />
               </columns>
             </TableView>
             <Label layoutX="14.0" layoutY="14.0" text="Parts">
@@ -92,12 +92,12 @@
       </Rectangle>
       <AnchorPane layoutX="45.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="241.0" prefWidth="441.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
-            <TableView layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
+            <TableView fx:id="productsTable" layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
                <columns>
-                  <TableColumn prefWidth="75.0" text="Product ID" />
-                  <TableColumn prefWidth="91.0" text="Product Name" />
-                  <TableColumn prefWidth="97.0" text="Inventory Level" />
-                  <TableColumn minWidth="0.0" prefWidth="171.0" text="Price / Cost per Unit" />
+                  <TableColumn fx:id="productIdColumn" prefWidth="75.0" text="Product ID" />
+                  <TableColumn fx:id="productNameColumn" prefWidth="91.0" text="Product Name" />
+                  <TableColumn fx:id="productInventoryLevelColumn" prefWidth="97.0" text="Inventory Level" />
+                  <TableColumn fx:id="productPriceColumn" minWidth="0.0" prefWidth="171.0" text="Price / Cost per Unit" />
                </columns>
             </TableView>
             <Label layoutX="14.0" layoutY="14.0" text="Products">
