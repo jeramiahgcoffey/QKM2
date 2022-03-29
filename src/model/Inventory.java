@@ -15,6 +15,8 @@ public class Inventory {
         allProducts.add(product);
     }
 
+//    TODO: Implement lookup and update methods
+
     public static boolean deletePart(Part part) {
         return allParts.remove(part);
     }
