@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -35,6 +36,10 @@ public class MainForm implements Initializable {
     public TableColumn<Number, Double> productPriceColumn;
     public TextField partQueryTF;
     public TextField productQueryTF;
+    public Label mainPartSearchAlert;
+    public Label mainPartEmptyAlert;
+    public Label mainProductSearchAlert;
+    public Label mainProductEmptyAlert;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -52,42 +57,30 @@ public class MainForm implements Initializable {
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    public void mainPartSearchAlertCheck() {
+        boolean emptyInventory = Inventory.getAllParts().isEmpty();
+        boolean emptyQuery = partSearch(partQueryTF.getText()).isEmpty();
+        mainPartEmptyAlert.setVisible(emptyInventory);
+        mainPartSearchAlert.setVisible(!emptyInventory && emptyQuery);
+    }
+
+    public void mainProductSearchAlertCheck() {
+        boolean emptyInventory = Inventory.getAllProducts().isEmpty();
+        boolean emptyQuery = productSearch(productQueryTF.getText()).isEmpty();
+        mainProductEmptyAlert.setVisible(emptyInventory);
+        mainProductSearchAlert.setVisible(!emptyInventory && emptyQuery);
+    }
+
     public void handlePartQuery() {
         String query = partQueryTF.getText();
         partsTable.setItems(partSearch(query));
-
+        mainPartSearchAlertCheck();
     }
 
     public void handleProductQuery() {
         String query = productQueryTF.getText();
         productsTable.setItems(productSearch(query));
-
-    }
-
-    private ObservableList<Part> partSearch(String query) {
-        ObservableList<Part> results = FXCollections.observableArrayList();
-        ObservableList<Part> allParts = Inventory.getAllParts();
-
-        for(Part part : allParts){
-            if(part.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(part.getId()).equals(query)){
-                results.add(part);
-            }
-        }
-
-        return results;
-    }
-
-    private ObservableList<Product> productSearch(String query) {
-        ObservableList<Product> results = FXCollections.observableArrayList();
-        ObservableList<Product> allProducts = Inventory.getAllProducts();
-
-        for(Product product: allProducts){
-            if(product.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(product.getId()).equals(query)){
-                results.add(product);
-            }
-        }
-
-        return results;
+        mainProductSearchAlertCheck();
     }
 
     public void onDeletePart() {
@@ -95,6 +88,7 @@ public class MainForm implements Initializable {
         if (selectedPart == null) { return; }
         Inventory.deletePart(selectedPart);
         partsTable.setItems(partSearch(partQueryTF.getText()));
+        mainPartSearchAlertCheck();
     }
 
     public void onDeleteProduct() {
@@ -102,6 +96,29 @@ public class MainForm implements Initializable {
         if (selectedProduct == null) { return; }
         Inventory.deleteProduct(selectedProduct);
         productsTable.setItems(productSearch(productQueryTF.getText()));
+        mainProductSearchAlertCheck();
+    }
+
+    private ObservableList<Part> partSearch(String query) {
+        ObservableList<Part> results = FXCollections.observableArrayList();
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for(Part part : allParts){
+            if(part.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(part.getId()).equals(query)){
+                results.add(part);
+            }
+        }
+        return results;
+    }
+
+    private ObservableList<Product> productSearch(String query) {
+        ObservableList<Product> results = FXCollections.observableArrayList();
+        ObservableList<Product> allProducts = Inventory.getAllProducts();
+        for(Product product: allProducts){
+            if(product.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(product.getId()).equals(query)){
+                results.add(product);
+            }
+        }
+        return results;
     }
 
     public void toAddPart(ActionEvent actionEvent) throws IOException {

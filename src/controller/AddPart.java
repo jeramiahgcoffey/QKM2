@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import model.InHouse;
 import model.Inventory;
 import model.Outsourced;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,20 +35,25 @@ public class AddPart implements Initializable {
 
     }
 
-    public void handleAddPartRadioChange() {
+    public void handleRadioChange() {
         if(addPartInHouse.isSelected()){
             addPartMIDCNLabel.setText("Machine ID");
         } else {
             addPartMIDCNLabel.setText("Company Name");
         }
     }
+
+
 //TODO: Implement validation of data
+
+
     public void handleSaveAddPart(ActionEvent actionEvent) throws IOException {
         String name = addPartNameTF.getText();
         int stock = Integer.parseInt(addPartStockTF.getText());
         double price = Double.parseDouble(addPartPriceTF.getText());
         int min = Integer.parseInt(addPartMinTF.getText());
         int max = Integer.parseInt(addPartMaxTF.getText());
+
 
         if(addPartInHouse.isSelected()) {
             int mid = Integer.parseInt(addPartMIDCNTF.getText());

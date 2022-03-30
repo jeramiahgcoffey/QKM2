@@ -80,6 +80,16 @@
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddPart" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyPart" text="Modify" />
             <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
+            <Label fx:id="mainPartSearchAlert" layoutX="88.0" layoutY="6.0" text="No parts match your query" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <Label fx:id="mainPartEmptyAlert" layoutX="88.0" layoutY="6.0" text="No parts in the inventory" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
          </children>
          <GridPane.margin>
             <Insets left="35.0" />
@@ -100,7 +110,7 @@
                   <TableColumn fx:id="productPriceColumn" minWidth="0.0" prefWidth="171.0" text="Price / Cost per Unit" />
                </columns>
             </TableView>
-            <Label layoutX="14.0" layoutY="14.0" text="Products">
+            <Label layoutX="14.0" layoutY="12.0" text="Products">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
@@ -108,6 +118,16 @@
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddProduct" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyProduct" text="Modify" />
             <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
+            <Label fx:id="mainProductSearchAlert" layoutX="80.0" layoutY="4.0" text="No products match your query" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <Label fx:id="mainProductEmptyAlert" layoutX="88.0" layoutY="6.0" text="No products in the inventory" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
          </children>
          <GridPane.margin>
             <Insets left="25.0" />

@@ -11,12 +11,12 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <RadioButton fx:id="addPartInHouse" layoutX="180.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleAddPartRadioChange" selected="true" text="In-House">
+      <RadioButton fx:id="addPartInHouse" layoutX="180.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleRadioChange" selected="true" text="In-House">
          <toggleGroup>
             <ToggleGroup fx:id="addPart" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="addPartOutsourced" layoutX="332.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleAddPartRadioChange" text="Outsourced" toggleGroup="$addPart" />
+      <RadioButton fx:id="addPartOutsourced" layoutX="332.0" layoutY="80.0" mnemonicParsing="false" onAction="#handleRadioChange" text="Outsourced" toggleGroup="$addPart" />
       <TextField disable="true" layoutX="180.0" layoutY="135.0" prefHeight="25.0" prefWidth="123.0" promptText="Auto Gen - Disabled">
          <font>
             <Font name="System Italic" size="12.0" />
