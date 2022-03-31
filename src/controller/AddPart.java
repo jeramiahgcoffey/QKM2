@@ -30,9 +30,10 @@ public class AddPart implements Initializable {
     public RadioButton addPartOutsourced;
     public Label addPartMIDCNLabel;
 
+    private static int autoId = 5;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
-
     }
 
     public void handleRadioChange() {
@@ -53,15 +54,15 @@ public class AddPart implements Initializable {
         double price = Double.parseDouble(addPartPriceTF.getText());
         int min = Integer.parseInt(addPartMinTF.getText());
         int max = Integer.parseInt(addPartMaxTF.getText());
-
-
         if(addPartInHouse.isSelected()) {
             int mid = Integer.parseInt(addPartMIDCNTF.getText());
-            Inventory.addPart(new InHouse(0, name, price, stock, min, max, mid));
+            Inventory.addPart(new InHouse(autoId, name, price, stock, min, max, mid));
         } else {
             String compName = addPartMIDCNTF.getText();
-            Inventory.addPart(new Outsourced(0, name, price, stock, min, max, compName));
+            Inventory.addPart(new Outsourced(autoId, name, price, stock, min, max, compName));
         }
+
+        autoId++;
 
         toMainForm(actionEvent);
     }

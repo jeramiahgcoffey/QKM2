@@ -14,9 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import model.Inventory;
-import model.Part;
-import model.Product;
+import model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -57,68 +55,70 @@ public class MainForm implements Initializable {
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
-    public void mainPartSearchAlertCheck() {
+    public void mainPartSearchAlertCheck(ObservableList<Part> queryResults) {
         boolean emptyInventory = Inventory.getAllParts().isEmpty();
-        boolean emptyQuery = partSearch(partQueryTF.getText()).isEmpty();
+        boolean emptyQueryResults = queryResults.isEmpty();
         mainPartEmptyAlert.setVisible(emptyInventory);
-        mainPartSearchAlert.setVisible(!emptyInventory && emptyQuery);
+        mainPartSearchAlert.setVisible(!emptyInventory && emptyQueryResults);
     }
 
-    public void mainProductSearchAlertCheck() {
+    public void mainProductSearchAlertCheck(ObservableList<Product> queryResults) {
         boolean emptyInventory = Inventory.getAllProducts().isEmpty();
-        boolean emptyQuery = productSearch(productQueryTF.getText()).isEmpty();
+        boolean emptyQuery = queryResults.isEmpty();
         mainProductEmptyAlert.setVisible(emptyInventory);
         mainProductSearchAlert.setVisible(!emptyInventory && emptyQuery);
     }
 
     public void handlePartQuery() {
         String query = partQueryTF.getText();
-        partsTable.setItems(partSearch(query));
-        mainPartSearchAlertCheck();
+        ObservableList<Part> results = FXCollections.observableArrayList();
+        try {
+            Part partToAdd = Inventory.lookupPart(Integer.parseInt(query));
+            if(partToAdd != null) {
+                results.add(partToAdd);
+            }
+        } catch (NumberFormatException ignored){
+
+        }
+        results.addAll(Inventory.lookupPart(query));
+        partsTable.setItems(results);
+        mainPartSearchAlertCheck(results);
     }
 
     public void handleProductQuery() {
         String query = productQueryTF.getText();
-        productsTable.setItems(productSearch(query));
-        mainProductSearchAlertCheck();
+        ObservableList<Product> results = FXCollections.observableArrayList();
+        try {
+            Product productToAdd = Inventory.lookupProduct(Integer.parseInt(query));
+            if(productToAdd != null) {
+                results.add(productToAdd);
+            }
+        } catch (NumberFormatException ignored){
+
+        }
+        results.addAll(Inventory.lookupProduct(query));
+        productsTable.setItems(results);
+        mainProductSearchAlertCheck(results);
     }
 
     public void onDeletePart() {
         Part selectedPart = (Part) partsTable.getSelectionModel().getSelectedItem();
         if (selectedPart == null) { return; }
-        Inventory.deletePart(selectedPart);
-        partsTable.setItems(partSearch(partQueryTF.getText()));
-        mainPartSearchAlertCheck();
+        if(Inventory.deletePart(selectedPart)) {
+            partsTable.getItems().remove(selectedPart);
+        }
+
+        handlePartQuery();
     }
 
     public void onDeleteProduct() {
         Product selectedProduct = (Product) productsTable.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) { return; }
-        Inventory.deleteProduct(selectedProduct);
-        productsTable.setItems(productSearch(productQueryTF.getText()));
-        mainProductSearchAlertCheck();
-    }
-
-    private ObservableList<Part> partSearch(String query) {
-        ObservableList<Part> results = FXCollections.observableArrayList();
-        ObservableList<Part> allParts = Inventory.getAllParts();
-        for(Part part : allParts){
-            if(part.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(part.getId()).equals(query)){
-                results.add(part);
-            }
+        if(Inventory.deleteProduct(selectedProduct)) {
+            productsTable.getItems().remove(selectedProduct);
         }
-        return results;
-    }
 
-    private ObservableList<Product> productSearch(String query) {
-        ObservableList<Product> results = FXCollections.observableArrayList();
-        ObservableList<Product> allProducts = Inventory.getAllProducts();
-        for(Product product: allProducts){
-            if(product.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)) || String.valueOf(product.getId()).equals(query)){
-                results.add(product);
-            }
-        }
-        return results;
+        handleProductQuery();
     }
 
     public void toAddPart(ActionEvent actionEvent) throws IOException {
@@ -130,6 +130,16 @@ public class MainForm implements Initializable {
     }
 
     public void toModifyPart(ActionEvent actionEvent) throws IOException {
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
+        if(selectedPart == null) {
+            return;
+        }
+        if(selectedPart.getClass().getSimpleName().equals("InHouse")){
+            ModifyPart.receiveSelectedPart((InHouse) selectedPart);
+        } else {
+            ModifyPart.receiveSelectedPart((Outsourced) selectedPart);
+        }
+
         Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyPart.fxml"));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
