@@ -25,7 +25,6 @@ public class Main extends Application {
         Inventory.addPart(testPart2);
         Outsourced testPart3 = new Outsourced(3, "Outsourced Part", 20, 5, 1, 10, "Fake Company");
         Inventory.addPart(testPart3);
-
         ObservableList<Part> testProductParts = FXCollections.observableArrayList();
         testProductParts.add(testPart);
         Product testProduct = new Product(testProductParts, 5, "Test Product", 50.5, 3, 1, 5);
@@ -35,7 +34,6 @@ public class Main extends Application {
 
     public static void main(String[] args){
         addTestData();
-
         launch(args);
     }
 }

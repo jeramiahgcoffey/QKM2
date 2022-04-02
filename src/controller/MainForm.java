@@ -7,10 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -18,6 +15,7 @@ import model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainForm implements Initializable {
@@ -102,21 +100,50 @@ public class MainForm implements Initializable {
 
     public void handleDeletePart() {
         Part selectedPart = (Part) partsTable.getSelectionModel().getSelectedItem();
-        if (selectedPart == null) { return; }
-        if(Inventory.deletePart(selectedPart)) {
-            partsTable.getItems().remove(selectedPart);
+        if (selectedPart == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Part selected for deletion.");
+            alert.showAndWait();
+            return;
         }
-
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setContentText("Are you sure you want to delete " + selectedPart.getName() + "?\nThis action cannot be undone.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (Inventory.deletePart(selectedPart)) {
+                partsTable.getItems().remove(selectedPart);
+            }
+        }
         handlePartQuery();
     }
 
     public void handleDeleteProduct() {
         Product selectedProduct = (Product) productsTable.getSelectionModel().getSelectedItem();
-        if (selectedProduct == null) { return; }
-        if(Inventory.deleteProduct(selectedProduct)) {
-            productsTable.getItems().remove(selectedProduct);
+        if (selectedProduct == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Product selected for deletion.");
+            alert.showAndWait();
+            return;
         }
-
+        if (!selectedProduct.getAllAssociatedParts().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Invalid Deletion");
+            alert.setContentText("Cannot delete Product which has Part(s) associated with it.");
+            alert.showAndWait();
+            return;
+        }
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setContentText("Are you sure you want to delete " + selectedProduct.getName() + "?\nThis action cannot be undone.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            if (Inventory.deleteProduct(selectedProduct)) {
+                productsTable.getItems().remove(selectedProduct);
+            }
+        }
         handleProductQuery();
     }
 
