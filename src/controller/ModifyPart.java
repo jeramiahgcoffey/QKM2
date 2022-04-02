@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import model.Inventory;
 import model.Outsourced;
 import model.InHouse;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -35,11 +34,11 @@ public class ModifyPart implements Initializable {
     public Label modPartNumericalAlert;
     public Label modPartMinMaxAlert;
     public Label modPartInvAlert;
+    public Label modPartPriceAlert;
 
     private static InHouse selectedInHousePart = null;
     private static Outsourced selectedOutsourcedPart = null;
     private static int index;
-
 
     public static void receiveSelectedPart(InHouse part){
         selectedInHousePart = part;
@@ -84,24 +83,18 @@ public class ModifyPart implements Initializable {
         }
     }
 
-    //TODO: Implement validation of data
-//    public void handleSave(ActionEvent actionEvent) throws IOException {
-//        int id = Integer.parseInt(modPartIdTF.getText());
-//        String name = modPartNameTF.getText();
-//        int stock = Integer.parseInt(modPartStockTF.getText());
-//        double price = Double.parseDouble(modPartPriceTF.getText());
-//        int min = Integer.parseInt(modPartMinTF.getText());
-//        int max = Integer.parseInt(modPartMaxTF.getText());
-//        if(modPartInHouse.isSelected()) {
-//            int mid = Integer.parseInt(modPartMIDCNTF.getText());
-//            Inventory.updatePart(index, new InHouse(id, name, price, stock, min, max, mid));
-//        } else {
-//            String compName = modPartMIDCNTF.getText();
-//            Inventory.updatePart(index, new Outsourced(id, name, price, stock, min, max, compName));
-//        }
-//
-//        toMainForm(actionEvent);
-//    }
+    public static boolean isInteger(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(str);
+            if (i < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
     public static boolean isNumeric(String str){
         if (str == null) {
@@ -109,6 +102,7 @@ public class ModifyPart implements Initializable {
         }
         try {
             double d = Double.parseDouble(str);
+            if (d < 0) return false;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -120,11 +114,13 @@ public class ModifyPart implements Initializable {
         modPartNumericalAlert.setVisible(false);
         modPartInvAlert.setVisible(false);
         modPartMinMaxAlert.setVisible(false);
+        modPartPriceAlert.setVisible(false);
 
         int id = Integer.parseInt(modPartIdTF.getText());
         String name = modPartNameTF.getText();
+
         int stock = 0;
-        if (isNumeric(modPartStockTF.getText())) {
+        if (isInteger(modPartStockTF.getText())) {
             stock = Integer.parseInt(modPartStockTF.getText());
         } else {
             validData = false;
@@ -136,11 +132,11 @@ public class ModifyPart implements Initializable {
             price = Double.parseDouble(modPartPriceTF.getText());
         } else {
             validData = false;
-            modPartNumericalAlert.setVisible(true);
+            modPartPriceAlert.setVisible(true);
         }
 
         int min = 0;
-        if (isNumeric(modPartMinTF.getText())) {
+        if (isInteger(modPartMinTF.getText())) {
             min = Integer.parseInt(modPartMinTF.getText());
         } else {
             validData = false;
@@ -148,7 +144,7 @@ public class ModifyPart implements Initializable {
         }
 
         int max = 0;
-        if (isNumeric(modPartMaxTF.getText())) {
+        if (isInteger(modPartMaxTF.getText())) {
             max = Integer.parseInt(modPartMaxTF.getText());
         } else {
             validData = false;
@@ -167,7 +163,7 @@ public class ModifyPart implements Initializable {
 
         if (validData) {
             if (modPartInHouse.isSelected()) {
-                if (isNumeric(modPartMIDCNTF.getText())) {
+                if (isInteger(modPartMIDCNTF.getText())) {
                     int mid = Integer.parseInt(modPartMIDCNTF.getText());
                     Inventory.updatePart(index, new InHouse(id, name, price, stock, min, max, mid));
                 } else {

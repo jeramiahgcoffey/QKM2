@@ -15,7 +15,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -45,12 +44,10 @@ public class MainForm implements Initializable {
         productSearchAlertCheck(Inventory.getAllProducts());
         partsTable.setItems(Inventory.getAllParts());
         productsTable.setItems(Inventory.getAllProducts());
-
         partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInventoryLevelColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         productNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         productInventoryLevelColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -141,7 +138,6 @@ public class MainForm implements Initializable {
         } else {
             ModifyPart.receiveSelectedPart((Outsourced) selectedPart);
         }
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPart.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);

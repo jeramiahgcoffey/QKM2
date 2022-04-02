@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -41,11 +40,14 @@ public class ModifyProduct implements Initializable {
     public Label modProdEmptyAlert;
     public TextField modProdAPQueryTF;
     public TextField modProdIdTF;
+    public Label modProdNumericalAlert;
+    public Label modProdMinMaxAlert;
+    public Label modProdInvAlert;
+    public Label modProdPriceAlert;
 
     private static Product selectedProduct = null;
     private static ObservableList<Part> currentParts = null;
     private static int index;
-
 
     public static void receiveSelectedProduct(Product product){
         selectedProduct = product;
@@ -61,20 +63,17 @@ public class ModifyProduct implements Initializable {
         modProdAvailablePartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
         modProdAvailablePartsStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         modProdAvailablePartsPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         modProdCurrentPartsTable.setItems(currentParts);
         modProdCurrentPartsId.setCellValueFactory(new PropertyValueFactory<>("id"));
         modProdCurrentPartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
         modProdCurrentPartsStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         modProdCurrentPartsPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         modProdIdTF.setText(String.valueOf(selectedProduct.getId()));
         modProdNameTF.setText(selectedProduct.getName());
         modProdStockTF.setText(String.valueOf(selectedProduct.getStock()));
         modProdPriceTF.setText(String.valueOf(selectedProduct.getPrice()));
         modProdMinTF.setText(String.valueOf(selectedProduct.getMin()));
         modProdMaxTF.setText(String.valueOf(selectedProduct.getMax()));
-
     }
 
     public void searchAlertCheck(ObservableList<Part> queryResults) {
@@ -93,7 +92,6 @@ public class ModifyProduct implements Initializable {
                 results.add(partToAdd);
             }
         } catch (NumberFormatException ignored){
-
         }
         results.addAll(Inventory.lookupPart(query));
         modProdAvailablePartsTable.setItems(results);
@@ -116,16 +114,87 @@ public class ModifyProduct implements Initializable {
         modProdCurrentPartsTable.setItems(currentParts);
     }
 
-    //TODO: Implement validation of data
+    public static boolean isInteger(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(str);
+            if (i < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isNumeric(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(str);
+            if (d < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     public void handleSave(ActionEvent actionEvent) throws IOException {
+        boolean validData = true;
+        modProdNumericalAlert.setVisible(false);
+        modProdInvAlert.setVisible(false);
+        modProdMinMaxAlert.setVisible(false);
+        modProdPriceAlert.setVisible(false);
+
         int id = selectedProduct.getId();
         String name = modProdNameTF.getText();
-        int stock = Integer.parseInt(modProdStockTF.getText());
-        double price = Double.parseDouble(modProdPriceTF.getText());
-        int min = Integer.parseInt(modProdMinTF.getText());
-        int max = Integer.parseInt(modProdMaxTF.getText());
-        Inventory.updateProduct(index, new Product(currentParts, id, name, price, stock, min, max));
-        toMainForm(actionEvent);
+        int stock = 0;
+        if (isInteger(modProdStockTF.getText())) {
+            stock = Integer.parseInt(modProdStockTF.getText());
+        } else {
+            validData = false;
+            modProdNumericalAlert.setVisible(true);
+        }
+
+        double price = 0;
+        if (isNumeric(modProdPriceTF.getText())) {
+            price = Double.parseDouble(modProdPriceTF.getText());
+        } else {
+            validData = false;
+            modProdPriceAlert.setVisible(true);
+        }
+
+        int min = 0;
+        if (isInteger(modProdMinTF.getText())) {
+            min = Integer.parseInt(modProdMinTF.getText());
+        } else {
+            validData = false;
+            modProdNumericalAlert.setVisible(true);
+        }
+
+        int max = 0;
+        if (isInteger(modProdMaxTF.getText())) {
+            max = Integer.parseInt(modProdMaxTF.getText());
+        } else {
+            validData = false;
+            modProdNumericalAlert.setVisible(true);
+        }
+
+        if (max <= min) {
+            validData = false;
+            modProdMinMaxAlert.setVisible(true);
+        }
+
+        if (stock < min || stock > max) {
+            validData = false;
+            modProdInvAlert.setVisible(true);
+        }
+
+        if (validData) {
+            Inventory.updateProduct(index, new Product(currentParts, id, name, price, stock, min, max));
+            toMainForm(actionEvent);
+        }
     }
 
     public void toMainForm(javafx.event.ActionEvent actionEvent) throws IOException {

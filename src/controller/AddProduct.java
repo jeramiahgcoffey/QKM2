@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -40,20 +39,23 @@ public class AddProduct implements Initializable {
     public TextField addProdMinTF;
     public Label addProdSearchAlert;
     public Label addProdEmptyAlert;
+    public Label addProdNumericalAlert;
+    public Label addProdMinMaxAlert;
+    public Label addProdInvAlert;
+    public Label addProdPriceAlert;
+
 
     private static int autoId = 1000;
-    private ObservableList<Part> currentParts = FXCollections.observableArrayList();
+    private final ObservableList<Part> currentParts = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         searchAlertCheck(Inventory.getAllParts());
         addProdAvailablePartsTable.setItems(Inventory.getAllParts());
-
         addProdAvailablePartsId.setCellValueFactory(new PropertyValueFactory<>("id"));
         addProdAvailablePartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
         addProdAvailablePartsStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
         addProdAvailablePartsPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-
         addProdCurrentPartsId.setCellValueFactory(new PropertyValueFactory<>("id"));
         addProdCurrentPartsName.setCellValueFactory(new PropertyValueFactory<>("name"));
         addProdCurrentPartsStock.setCellValueFactory(new PropertyValueFactory<>("stock"));
@@ -98,17 +100,88 @@ public class AddProduct implements Initializable {
         }
         addProdCurrentPartsTable.setItems(currentParts);
     }
-//TODO: Implement Data Validation
-    public void handleSave(ActionEvent actionEvent) throws IOException {
-        String name = addProdNameTF.getText();
-        int stock = Integer.parseInt(addProdStockTF.getText());
-        double price = Double.parseDouble(addProdPriceTF.getText());
-        int min = Integer.parseInt(addProdMinTF.getText());
-        int max = Integer.parseInt(addProdMaxTF.getText());
-        Inventory.addProduct(new Product(currentParts, autoId, name, price, stock, min, max));
-        autoId++;
 
-        toMainForm(actionEvent);
+    public static boolean isInteger(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(str);
+            if (i < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isNumeric(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(str);
+            if (d < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public void handleSave(ActionEvent actionEvent) throws IOException {
+        boolean validData = true;
+        addProdNumericalAlert.setVisible(false);
+        addProdInvAlert.setVisible(false);
+        addProdMinMaxAlert.setVisible(false);
+        addProdPriceAlert.setVisible(false);
+
+        String name = addProdNameTF.getText();
+        int stock = 0;
+        if (isInteger(addProdStockTF.getText())) {
+            stock = Integer.parseInt(addProdStockTF.getText());
+        } else {
+            validData = false;
+            addProdNumericalAlert.setVisible(true);
+        }
+
+        double price = 0;
+        if (isNumeric(addProdPriceTF.getText())) {
+            price = Double.parseDouble(addProdPriceTF.getText());
+        } else {
+            validData = false;
+            addProdPriceAlert.setVisible(true);
+        }
+
+        int min = 0;
+        if (isInteger(addProdMinTF.getText())) {
+            min = Integer.parseInt(addProdMinTF.getText());
+        } else {
+            validData = false;
+            addProdNumericalAlert.setVisible(true);
+        }
+
+        int max = 0;
+        if (isInteger(addProdMaxTF.getText())) {
+            max = Integer.parseInt(addProdMaxTF.getText());
+        } else {
+            validData = false;
+            addProdNumericalAlert.setVisible(true);
+        }
+
+        if (max <= min) {
+            validData = false;
+            addProdMinMaxAlert.setVisible(true);
+        }
+
+        if (stock < min || stock > max) {
+            validData = false;
+            addProdInvAlert.setVisible(true);
+        }
+
+        if (validData) {
+            Inventory.addProduct(new Product(currentParts, autoId, name, price, stock, min, max));
+            autoId++;
+            toMainForm(actionEvent);
+        }
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {

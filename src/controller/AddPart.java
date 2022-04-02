@@ -33,7 +33,7 @@ public class AddPart implements Initializable {
     public Label addPartNumericalAlert;
     public Label addPartMinMaxAlert;
     public Label addPartInvAlert;
-
+    public Label addPartPriceAlert;
 
     private static int autoId = 5;
 
@@ -49,12 +49,26 @@ public class AddPart implements Initializable {
         }
     }
 
+    public static boolean isInteger(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(str);
+            if (i < 0) return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static boolean isNumeric(String str){
         if (str == null) {
             return false;
         }
         try {
             double d = Double.parseDouble(str);
+            if (d < 0) return false;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -66,10 +80,11 @@ public class AddPart implements Initializable {
         addPartNumericalAlert.setVisible(false);
         addPartInvAlert.setVisible(false);
         addPartMinMaxAlert.setVisible(false);
+        addPartPriceAlert.setVisible(false);
 
         String name = addPartNameTF.getText();
         int stock = 0;
-        if (isNumeric(addPartStockTF.getText())) {
+        if (isInteger(addPartStockTF.getText())) {
             stock = Integer.parseInt(addPartStockTF.getText());
         } else {
             validData = false;
@@ -81,11 +96,11 @@ public class AddPart implements Initializable {
             price = Double.parseDouble(addPartPriceTF.getText());
         } else {
             validData = false;
-            addPartNumericalAlert.setVisible(true);
+            addPartPriceAlert.setVisible(true);
         }
 
         int min = 0;
-        if (isNumeric(addPartMinTF.getText())) {
+        if (isInteger(addPartMinTF.getText())) {
             min = Integer.parseInt(addPartMinTF.getText());
         } else {
             validData = false;
@@ -93,7 +108,7 @@ public class AddPart implements Initializable {
         }
 
         int max = 0;
-        if (isNumeric(addPartMaxTF.getText())) {
+        if (isInteger(addPartMaxTF.getText())) {
             max = Integer.parseInt(addPartMaxTF.getText());
         } else {
             validData = false;
@@ -112,7 +127,7 @@ public class AddPart implements Initializable {
 
         if (validData) {
             if (addPartInHouse.isSelected()) {
-                if (isNumeric(addPartMIDCNTF.getText())) {
+                if (isInteger(addPartMIDCNTF.getText())) {
                     int mid = Integer.parseInt(addPartMIDCNTF.getText());
                     Inventory.addPart(new InHouse(autoId, name, price, stock, min, max, mid));
                 } else {

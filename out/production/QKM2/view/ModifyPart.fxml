@@ -56,5 +56,10 @@
             <Font size="10.0" />
          </font>
       </Label>
+      <Label fx:id="modPartPriceAlert" layoutX="15.0" layoutY="434.0" prefHeight="25.0" prefWidth="253.0" text="Price must be a positive number" visible="false">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
