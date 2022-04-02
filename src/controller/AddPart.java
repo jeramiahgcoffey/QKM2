@@ -16,6 +16,7 @@ import model.Inventory;
 import model.Outsourced;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class AddPart implements Initializable {
@@ -29,6 +30,10 @@ public class AddPart implements Initializable {
     public RadioButton addPartInHouse;
     public RadioButton addPartOutsourced;
     public Label addPartMIDCNLabel;
+    public Label addPartNumericalAlert;
+    public Label addPartMinMaxAlert;
+    public Label addPartInvAlert;
+
 
     private static int autoId = 5;
 
@@ -44,31 +49,87 @@ public class AddPart implements Initializable {
         }
     }
 
+    public static boolean isNumeric(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 
-//TODO: Implement validation of data
+    public void handleSave(ActionEvent actionEvent) throws IOException {
+        boolean validData = true;
+        addPartNumericalAlert.setVisible(false);
+        addPartInvAlert.setVisible(false);
+        addPartMinMaxAlert.setVisible(false);
 
-
-    public void handleSaveAddPart(ActionEvent actionEvent) throws IOException {
         String name = addPartNameTF.getText();
-        int stock = Integer.parseInt(addPartStockTF.getText());
-        double price = Double.parseDouble(addPartPriceTF.getText());
-        int min = Integer.parseInt(addPartMinTF.getText());
-        int max = Integer.parseInt(addPartMaxTF.getText());
-        if(addPartInHouse.isSelected()) {
-            int mid = Integer.parseInt(addPartMIDCNTF.getText());
-            Inventory.addPart(new InHouse(autoId, name, price, stock, min, max, mid));
+        int stock = 0;
+        if (isNumeric(addPartStockTF.getText())) {
+            stock = Integer.parseInt(addPartStockTF.getText());
         } else {
-            String compName = addPartMIDCNTF.getText();
-            Inventory.addPart(new Outsourced(autoId, name, price, stock, min, max, compName));
+            validData = false;
+            addPartNumericalAlert.setVisible(true);
         }
 
-        autoId++;
+        double price = 0;
+        if (isNumeric(addPartPriceTF.getText())) {
+            price = Double.parseDouble(addPartPriceTF.getText());
+        } else {
+            validData = false;
+            addPartNumericalAlert.setVisible(true);
+        }
 
-        toMainForm(actionEvent);
+        int min = 0;
+        if (isNumeric(addPartMinTF.getText())) {
+            min = Integer.parseInt(addPartMinTF.getText());
+        } else {
+            validData = false;
+            addPartNumericalAlert.setVisible(true);
+        }
+
+        int max = 0;
+        if (isNumeric(addPartMaxTF.getText())) {
+            max = Integer.parseInt(addPartMaxTF.getText());
+        } else {
+            validData = false;
+            addPartNumericalAlert.setVisible(true);
+        }
+
+        if (max <= min) {
+            validData = false;
+            addPartMinMaxAlert.setVisible(true);
+        }
+
+        if (stock < min || stock > max) {
+            validData = false;
+            addPartInvAlert.setVisible(true);
+        }
+
+        if (validData) {
+            if (addPartInHouse.isSelected()) {
+                if (isNumeric(addPartMIDCNTF.getText())) {
+                    int mid = Integer.parseInt(addPartMIDCNTF.getText());
+                    Inventory.addPart(new InHouse(autoId, name, price, stock, min, max, mid));
+                } else {
+                    addPartNumericalAlert.setVisible(true);
+                    return;
+                }
+            } else {
+                String compName = addPartMIDCNTF.getText();
+                Inventory.addPart(new Outsourced(autoId, name, price, stock, min, max, compName));
+            }
+            autoId++;
+            toMainForm(actionEvent);
+        }
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainForm.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainForm.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

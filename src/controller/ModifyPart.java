@@ -17,6 +17,7 @@ import model.InHouse;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ModifyPart implements Initializable {
@@ -31,10 +32,14 @@ public class ModifyPart implements Initializable {
     public ToggleGroup modPart;
     public Label modPartMIDCNLabel;
     public TextField modPartIdTF;
+    public Label modPartNumericalAlert;
+    public Label modPartMinMaxAlert;
+    public Label modPartInvAlert;
 
     private static InHouse selectedInHousePart = null;
     private static Outsourced selectedOutsourcedPart = null;
     private static int index;
+
 
     public static void receiveSelectedPart(InHouse part){
         selectedInHousePart = part;
@@ -60,6 +65,7 @@ public class ModifyPart implements Initializable {
             modPartMIDCNTF.setText(String.valueOf(selectedInHousePart.getMachineId()));
         } else {
             modPartOutsourced.setSelected(true);
+            modPartMIDCNLabel.setText("Company Name");
             modPartIdTF.setText(String.valueOf(selectedOutsourcedPart.getId()));
             modPartNameTF.setText(selectedOutsourcedPart.getName());
             modPartStockTF.setText(String.valueOf(selectedOutsourcedPart.getStock()));
@@ -79,26 +85,108 @@ public class ModifyPart implements Initializable {
     }
 
     //TODO: Implement validation of data
-    public void handleSaveModPart(ActionEvent actionEvent) throws IOException {
+//    public void handleSave(ActionEvent actionEvent) throws IOException {
+//        int id = Integer.parseInt(modPartIdTF.getText());
+//        String name = modPartNameTF.getText();
+//        int stock = Integer.parseInt(modPartStockTF.getText());
+//        double price = Double.parseDouble(modPartPriceTF.getText());
+//        int min = Integer.parseInt(modPartMinTF.getText());
+//        int max = Integer.parseInt(modPartMaxTF.getText());
+//        if(modPartInHouse.isSelected()) {
+//            int mid = Integer.parseInt(modPartMIDCNTF.getText());
+//            Inventory.updatePart(index, new InHouse(id, name, price, stock, min, max, mid));
+//        } else {
+//            String compName = modPartMIDCNTF.getText();
+//            Inventory.updatePart(index, new Outsourced(id, name, price, stock, min, max, compName));
+//        }
+//
+//        toMainForm(actionEvent);
+//    }
+
+    public static boolean isNumeric(String str){
+        if (str == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public void handleSave(ActionEvent actionEvent) throws IOException {
+        boolean validData = true;
+        modPartNumericalAlert.setVisible(false);
+        modPartInvAlert.setVisible(false);
+        modPartMinMaxAlert.setVisible(false);
+
         int id = Integer.parseInt(modPartIdTF.getText());
         String name = modPartNameTF.getText();
-        int stock = Integer.parseInt(modPartStockTF.getText());
-        double price = Double.parseDouble(modPartPriceTF.getText());
-        int min = Integer.parseInt(modPartMinTF.getText());
-        int max = Integer.parseInt(modPartMaxTF.getText());
-        if(modPartInHouse.isSelected()) {
-            int mid = Integer.parseInt(modPartMIDCNTF.getText());
-            Inventory.updatePart(index, new InHouse(id, name, price, stock, min, max, mid));
+        int stock = 0;
+        if (isNumeric(modPartStockTF.getText())) {
+            stock = Integer.parseInt(modPartStockTF.getText());
         } else {
-            String compName = modPartMIDCNTF.getText();
-            Inventory.updatePart(index, new Outsourced(id, name, price, stock, min, max, compName));
+            validData = false;
+            modPartNumericalAlert.setVisible(true);
         }
 
-        toMainForm(actionEvent);
+        double price = 0;
+        if (isNumeric(modPartPriceTF.getText())) {
+            price = Double.parseDouble(modPartPriceTF.getText());
+        } else {
+            validData = false;
+            modPartNumericalAlert.setVisible(true);
+        }
+
+        int min = 0;
+        if (isNumeric(modPartMinTF.getText())) {
+            min = Integer.parseInt(modPartMinTF.getText());
+        } else {
+            validData = false;
+            modPartNumericalAlert.setVisible(true);
+        }
+
+        int max = 0;
+        if (isNumeric(modPartMaxTF.getText())) {
+            max = Integer.parseInt(modPartMaxTF.getText());
+        } else {
+            validData = false;
+            modPartNumericalAlert.setVisible(true);
+        }
+
+        if (max <= min) {
+            validData = false;
+            modPartMinMaxAlert.setVisible(true);
+        }
+
+        if (stock < min || stock > max) {
+            validData = false;
+            modPartInvAlert.setVisible(true);
+        }
+
+        if (validData) {
+            if (modPartInHouse.isSelected()) {
+                if (isNumeric(modPartMIDCNTF.getText())) {
+                    int mid = Integer.parseInt(modPartMIDCNTF.getText());
+                    Inventory.updatePart(index, new InHouse(id, name, price, stock, min, max, mid));
+                } else {
+                    modPartNumericalAlert.setVisible(true);
+                    return;
+                }
+            } else {
+                String compName = modPartMIDCNTF.getText();
+                Inventory.updatePart(index, new Outsourced(id, name, price, stock, min, max, compName));
+            }
+
+            toMainForm(actionEvent);
+        }
     }
 
     public void toMainForm(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainForm.fxml"));
+        selectedInHousePart = null;
+        selectedOutsourcedPart = null;
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainForm.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

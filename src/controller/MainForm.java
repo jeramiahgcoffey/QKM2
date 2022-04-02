@@ -18,7 +18,7 @@ import model.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainForm implements Initializable {
@@ -41,6 +41,8 @@ public class MainForm implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
+        partSearchAlertCheck(Inventory.getAllParts());
+        productSearchAlertCheck(Inventory.getAllProducts());
         partsTable.setItems(Inventory.getAllParts());
         productsTable.setItems(Inventory.getAllProducts());
 
@@ -55,14 +57,14 @@ public class MainForm implements Initializable {
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
-    public void mainPartSearchAlertCheck(ObservableList<Part> queryResults) {
+    public void partSearchAlertCheck(ObservableList<Part> queryResults) {
         boolean emptyInventory = Inventory.getAllParts().isEmpty();
         boolean emptyQueryResults = queryResults.isEmpty();
         mainPartEmptyAlert.setVisible(emptyInventory);
         mainPartSearchAlert.setVisible(!emptyInventory && emptyQueryResults);
     }
 
-    public void mainProductSearchAlertCheck(ObservableList<Product> queryResults) {
+    public void productSearchAlertCheck(ObservableList<Product> queryResults) {
         boolean emptyInventory = Inventory.getAllProducts().isEmpty();
         boolean emptyQuery = queryResults.isEmpty();
         mainProductEmptyAlert.setVisible(emptyInventory);
@@ -82,7 +84,7 @@ public class MainForm implements Initializable {
         }
         results.addAll(Inventory.lookupPart(query));
         partsTable.setItems(results);
-        mainPartSearchAlertCheck(results);
+        partSearchAlertCheck(results);
     }
 
     public void handleProductQuery() {
@@ -98,10 +100,10 @@ public class MainForm implements Initializable {
         }
         results.addAll(Inventory.lookupProduct(query));
         productsTable.setItems(results);
-        mainProductSearchAlertCheck(results);
+        productSearchAlertCheck(results);
     }
 
-    public void onDeletePart() {
+    public void handleDeletePart() {
         Part selectedPart = (Part) partsTable.getSelectionModel().getSelectedItem();
         if (selectedPart == null) { return; }
         if(Inventory.deletePart(selectedPart)) {
@@ -111,7 +113,7 @@ public class MainForm implements Initializable {
         handlePartQuery();
     }
 
-    public void onDeleteProduct() {
+    public void handleDeleteProduct() {
         Product selectedProduct = (Product) productsTable.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) { return; }
         if(Inventory.deleteProduct(selectedProduct)) {
@@ -122,7 +124,7 @@ public class MainForm implements Initializable {
     }
 
     public void toAddPart(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddPart.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddPart.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -140,7 +142,7 @@ public class MainForm implements Initializable {
             ModifyPart.receiveSelectedPart((Outsourced) selectedPart);
         }
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyPart.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyPart.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -148,7 +150,7 @@ public class MainForm implements Initializable {
     }
 
     public void toAddProduct(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/AddProduct.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddProduct.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -156,7 +158,12 @@ public class MainForm implements Initializable {
     }
 
     public void toModifyProduct(ActionEvent actionEvent) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/ModifyProduct.fxml"));
+        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null) {
+            return;
+        }
+        ModifyProduct.receiveSelectedProduct(selectedProduct);
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/ModifyProduct.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);

@@ -60,12 +60,13 @@ public class Inventory {
     }
 
     public static void updatePart(int index, Part newPart) {
-        Inventory.getAllParts().set(index, newPart);
+        getAllParts().set(index, newPart);
+
     }
 
-//    public static void updateProduct(int index, Product selectedProduct) {
-//
-//    }
+    public static void updateProduct(int index, Product newProduct) {
+        getAllProducts().set(index, newProduct);
+    }
 
     public static boolean deletePart(Part part) {
         return allParts.remove(part);

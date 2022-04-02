@@ -79,7 +79,7 @@
             <TextField fx:id="partQueryTF" layoutX="249.0" layoutY="1.0" onKeyTyped="#handlePartQuery" promptText="Search by Part ID or Name" />
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddPart" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyPart" text="Modify" />
-            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
+            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleDeletePart" text="Delete" />
             <Label fx:id="mainPartSearchAlert" layoutX="88.0" layoutY="6.0" text="No parts match your query" textFill="RED" visible="false">
                <font>
                   <Font name="System Bold" size="11.0" />
@@ -117,7 +117,7 @@
             <TextField fx:id="productQueryTF" layoutX="249.0" layoutY="1.0" onKeyTyped="#handleProductQuery" promptText="Search by Product ID or Name" />
             <Button layoutX="222.0" layoutY="214.0" mnemonicParsing="false" onAction="#toAddProduct" text="Add" />
             <Button layoutX="275.0" layoutY="214.0" mnemonicParsing="false" onAction="#toModifyProduct" text="Modify" />
-            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
+            <Button layoutX="343.0" layoutY="214.0" mnemonicParsing="false" onAction="#handleDeleteProduct" text="Delete" />
             <Label fx:id="mainProductSearchAlert" layoutX="80.0" layoutY="4.0" text="No products match your query" textFill="RED" visible="false">
                <font>
                   <Font name="System Bold" size="11.0" />
