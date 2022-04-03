@@ -19,6 +19,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class which specifies logic for Main Form screen.
+ * @author Jeramiah Coffey
+ */
 public class MainForm implements Initializable {
     public TableView<Part> partsTable;
     public TableView<Product> productsTable;
@@ -37,6 +41,12 @@ public class MainForm implements Initializable {
     public Label mainProductSearchAlert;
     public Label mainProductEmptyAlert;
 
+    /**
+     * Initializes controller.
+     * Sets table values.
+     * @param url URL used to resolve paths, null if not known
+     * @param resourceBundle Resources used to localize the root object, null if not localized
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         partSearchAlertCheck(Inventory.getAllParts());
@@ -53,6 +63,10 @@ public class MainForm implements Initializable {
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    /**
+     * Checks for situations where an empty Part inventory or empty Part query results alert message needs to be displayed.
+     * @param queryResults list of results matching the query
+     */
     public void partSearchAlertCheck(ObservableList<Part> queryResults) {
         boolean emptyInventory = Inventory.getAllParts().isEmpty();
         boolean emptyQueryResults = queryResults.isEmpty();
@@ -60,6 +74,10 @@ public class MainForm implements Initializable {
         mainPartSearchAlert.setVisible(!emptyInventory && emptyQueryResults);
     }
 
+    /**
+     * Checks for situations where an empty Product inventory or empty Product query results alert message needs to be displayed.
+     * @param queryResults list of results matching the query
+     */
     public void productSearchAlertCheck(ObservableList<Product> queryResults) {
         boolean emptyInventory = Inventory.getAllProducts().isEmpty();
         boolean emptyQuery = queryResults.isEmpty();
@@ -67,6 +85,11 @@ public class MainForm implements Initializable {
         mainProductSearchAlert.setVisible(!emptyInventory && emptyQuery);
     }
 
+    /**
+     * Handles querying of the inventory of Parts.
+     * Sets Part table to the query results.
+     * Calls to partSearchAlertCheck passing in the query results.
+     */
     public void handlePartQuery() {
         String query = partQueryTF.getText();
         ObservableList<Part> results = FXCollections.observableArrayList();
@@ -83,6 +106,11 @@ public class MainForm implements Initializable {
         partSearchAlertCheck(results);
     }
 
+    /**
+     * Handles querying of the inventory of Products.
+     * Sets Product table to the query results.
+     * Calls to productSearchAlertCheck passing in the query results.
+     */
     public void handleProductQuery() {
         String query = productQueryTF.getText();
         ObservableList<Product> results = FXCollections.observableArrayList();
@@ -99,8 +127,14 @@ public class MainForm implements Initializable {
         productSearchAlertCheck(results);
     }
 
+    /**
+     * Handles Delete button for Parts pane.
+     *
+     * LOGICAL ERROR: The Parts table would not update after deletion if there was a query in the search bar.
+     * Fixed by adding a call to handlePartQuery at the end of the method.
+     */
     public void handleDeletePart() {
-        Part selectedPart = (Part) partsTable.getSelectionModel().getSelectedItem();
+        Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
         if (selectedPart == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Invalid");
@@ -120,8 +154,14 @@ public class MainForm implements Initializable {
         handlePartQuery();
     }
 
+    /**
+     * Handles delete button for Products pane.
+     *
+     * LOGICAL ERROR: The Products table would not update after deletion if there was a query in the search bar.
+     * Fixed by adding a call to handleProductQuery at the end of the method.
+     */
     public void handleDeleteProduct() {
-        Product selectedProduct = (Product) productsTable.getSelectionModel().getSelectedItem();
+        Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
         if (selectedProduct == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Invalid");
@@ -148,6 +188,10 @@ public class MainForm implements Initializable {
         handleProductQuery();
     }
 
+    /**
+     * Redirects to Add Part screen.
+     * @param actionEvent the event which triggered the method
+     */
     public void toAddPart(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddPart.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -156,9 +200,17 @@ public class MainForm implements Initializable {
         stage.show();
     }
 
+    /**
+     * Redirects to Modify Part screen. Passes data to Modify Part controller.
+     * @param actionEvent the event which triggered the method
+     */
     public void toModifyPart(ActionEvent actionEvent) throws IOException {
         Part selectedPart = partsTable.getSelectionModel().getSelectedItem();
         if(selectedPart == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Part selected.");
+            alert.showAndWait();
             return;
         }
         if(selectedPart.getClass().getSimpleName().equals("InHouse")){
@@ -173,6 +225,10 @@ public class MainForm implements Initializable {
         stage.show();
     }
 
+    /**
+     * Redirects to Add Product screen.
+     * @param actionEvent the event which triggered the method
+     */
     public void toAddProduct(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/AddProduct.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
@@ -181,9 +237,17 @@ public class MainForm implements Initializable {
         stage.show();
     }
 
+    /**
+     * Redirects to Modify Product screen. Passes data to Modify Product controller.
+     * @param actionEvent the event which triggered the method
+     */
     public void toModifyProduct(ActionEvent actionEvent) throws IOException {
         Product selectedProduct = productsTable.getSelectionModel().getSelectedItem();
         if(selectedProduct == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Product selected.");
+            alert.showAndWait();
             return;
         }
         ModifyProduct.receiveSelectedProduct(selectedProduct);
@@ -194,6 +258,9 @@ public class MainForm implements Initializable {
         stage.show();
     }
 
+    /**
+     * Handles Exit button.
+     */
     public void handleExit() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Are you sure?");

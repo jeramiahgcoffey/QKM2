@@ -18,6 +18,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class which specifies logic for Modify Product screen.
+ * @author Jeramiah Coffey
+ */
 public class ModifyProduct implements Initializable {
     public TableView<Part> modProdAvailablePartsTable;
     public TableColumn<Number, Integer> modProdAvailablePartsId;
@@ -43,16 +47,37 @@ public class ModifyProduct implements Initializable {
     public Label modProdInvAlert;
     public Label modProdPriceAlert;
 
+    /**
+     * Static variable for storing the Product data received from the Main Form.
+     */
     private static Product selectedProduct = null;
+
+    /**
+     * Static variable for storing the Associated Parts data for the Product received from the Main Form.
+     */
     private static ObservableList<Part> currentParts = null;
+
+    /**
+     * Static variable for storing the index of the Product received from the Main Form.
+     */
     private static int index;
 
+    /**
+     * Method for receiving the Product data from the Main Form.
+     * @param product the Product data
+     */
     public static void receiveSelectedProduct(Product product){
         selectedProduct = product;
         currentParts = product.getAllAssociatedParts();
         index = Inventory.getAllProducts().indexOf(product);
     }
 
+    /**
+     * Initializes controller.
+     * Sets table values.
+     * @param url URL used to resolve paths, null if not known
+     * @param resourceBundle Resources used to localize the root object, null if not localized
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         searchAlertCheck(Inventory.getAllParts());
@@ -74,6 +99,10 @@ public class ModifyProduct implements Initializable {
         modProdMaxTF.setText(String.valueOf(selectedProduct.getMax()));
     }
 
+    /**
+     * Checks for situations where an empty inventory or empty query results alert message needs to be displayed.
+     * @param queryResults list of results matching the query
+     */
     public void searchAlertCheck(ObservableList<Part> queryResults) {
         boolean emptyInventory = Inventory.getAllParts().isEmpty();
         boolean emptyQueryResults = queryResults.isEmpty();
@@ -81,6 +110,11 @@ public class ModifyProduct implements Initializable {
         modProdSearchAlert.setVisible(!emptyInventory && emptyQueryResults);
     }
 
+    /**
+     * Handles querying of the inventory of Parts.
+     * Sets table to the query results.
+     * Calls to searchAlertCheck passing in the query results.
+     */
     public void handlePartQuery() {
         String query = modProdAPQueryTF.getText();
         ObservableList<Part> results = FXCollections.observableArrayList();
@@ -96,8 +130,28 @@ public class ModifyProduct implements Initializable {
         searchAlertCheck(results);
     }
 
+    /**
+     * Handles the Add Associated Part button.
+     */
     public void handleAddAP() {
         Part selectedPart = modProdAvailablePartsTable.getSelectionModel().getSelectedItem();
+        if (selectedPart == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Part selected.");
+            alert.showAndWait();
+            return;
+        } else {
+            currentParts.add(selectedPart);
+        }
+        modProdCurrentPartsTable.setItems(currentParts);
+    }
+
+    /**
+     * Handles the Remove Associated Part button.
+     */
+    public void handleRemAP() {
+        Part selectedPart = modProdCurrentPartsTable.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Are you sure?");
@@ -110,14 +164,11 @@ public class ModifyProduct implements Initializable {
         modProdCurrentPartsTable.setItems(currentParts);
     }
 
-    public void handleRemAP() {
-        Part selectedPart = modProdCurrentPartsTable.getSelectionModel().getSelectedItem();
-        if (selectedPart != null) {
-            currentParts.remove(selectedPart);
-        }
-        modProdCurrentPartsTable.setItems(currentParts);
-    }
-
+    /**
+     * Validates a string input as a positive integer.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isInteger(String str){
         if (str == null) {
             return false;
@@ -131,6 +182,11 @@ public class ModifyProduct implements Initializable {
         return true;
     }
 
+    /**
+     * Validates a string input as a positive double/number.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isNumeric(String str){
         if (str == null) {
             return false;
@@ -144,6 +200,12 @@ public class ModifyProduct implements Initializable {
         return true;
     }
 
+    /**
+     * Handler for Modify Product Save button. Validates input data from text fields, and sets visible any alerts needed depending on validation results.
+     * Upon validation, creates updates Product object in the inventory.
+     * Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void handleSave(ActionEvent actionEvent) throws IOException {
         boolean validData = true;
         modProdNumericalAlert.setVisible(false);
@@ -201,6 +263,10 @@ public class ModifyProduct implements Initializable {
         }
     }
 
+    /**
+     * Handler for Add Product Cancel button. Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void toMainForm(javafx.event.ActionEvent actionEvent) throws IOException {
         selectedProduct = null;
         currentParts = null;

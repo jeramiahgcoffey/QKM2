@@ -8,11 +8,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.*;
+import java.util.Objects;
 
+/**
+ * This application is an Inventory Management System for Parts and Products.
+ *
+ * FUTURE ENHANCEMENT: Functionality may be extended by adding logic for selling products, which would update the product and associated parts stock levels. Sales could also be tracked in this way.
+ *
+ * Main class for the application.
+ * @author Jeramiah Coffey
+ */
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainForm.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainForm.fxml")));
         stage.setScene(new Scene(root, 1000, 400));
         stage.setResizable(false);
         stage.show();
@@ -29,7 +38,6 @@ public class Main extends Application {
         testProductParts.add(testPart);
         Product testProduct = new Product(testProductParts, 5, "Test Product", 50.5, 3, 1, 5);
         Inventory.addProduct(testProduct);
-
     }
 
     public static void main(String[] args){

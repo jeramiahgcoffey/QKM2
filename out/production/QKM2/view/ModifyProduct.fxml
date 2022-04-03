@@ -19,18 +19,18 @@
       </Label>
       <TableView fx:id="modProdAvailablePartsTable" layoutX="417.0" layoutY="67.0" prefHeight="176.0" prefWidth="435.0">
          <columns>
-            <TableColumn fx:id="modProdAvailablePartsId" prefWidth="75.0" text="Part ID" />
-            <TableColumn fx:id="modProdAvailablePartsName" prefWidth="75.0" text="Part Name" />
-            <TableColumn fx:id="modProdAvailablePartsStock" prefWidth="104.0" text="Inventory Level" />
-            <TableColumn fx:id="modProdAvailablePartsPrice" prefWidth="179.0" text="Price / Cost per Unit" />
+            <TableColumn fx:id="modProdAvailablePartsId" prefWidth="74.0" text="Part ID" />
+            <TableColumn fx:id="modProdAvailablePartsName" prefWidth="130.0" text="Part Name" />
+            <TableColumn fx:id="modProdAvailablePartsStock" prefWidth="100.0" text="Inventory Level" />
+            <TableColumn fx:id="modProdAvailablePartsPrice" prefWidth="129.0" text="Price / Cost per Unit" />
          </columns>
       </TableView>
       <TableView fx:id="modProdCurrentPartsTable" layoutX="417.0" layoutY="284.0" prefHeight="176.0" prefWidth="435.0">
          <columns>
-            <TableColumn fx:id="modProdCurrentPartsId" prefWidth="75.0" text="Part ID" />
-            <TableColumn fx:id="modProdCurrentPartsName" prefWidth="75.0" text="Part Name" />
-            <TableColumn fx:id="modProdCurrentPartsStock" prefWidth="104.0" text="Inventory Level" />
-            <TableColumn fx:id="modProdCurrentPartsPrice" prefWidth="179.0" text="Price / Cost per Unit" />
+            <TableColumn fx:id="modProdCurrentPartsId" prefWidth="74.0" text="Part ID" />
+            <TableColumn fx:id="modProdCurrentPartsName" prefWidth="130.0" text="Part Name" />
+            <TableColumn fx:id="modProdCurrentPartsStock" prefWidth="100.0" text="Inventory Level" />
+            <TableColumn fx:id="modProdCurrentPartsPrice" prefWidth="129.0" text="Price / Cost per Unit" />
          </columns>
       </TableView>
       <TextField fx:id="modProdAPQueryTF" layoutX="703.0" layoutY="35.0" onKeyTyped="#handlePartQuery" promptText="Search by Part ID or Name" />

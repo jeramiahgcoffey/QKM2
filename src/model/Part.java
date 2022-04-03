@@ -1,13 +1,11 @@
- /**
-* Supplied class Part.java 
- */
-
-/**
- *
- * @author Jeramiah Coffey
+ /*
+* Supplied class Part.java
  */
  package model;
-
+ /**
+  * Models an abstract Part.
+  * @author Jeramiah Coffey
+  */
 public abstract class Part {
     private int id;
     private String name;

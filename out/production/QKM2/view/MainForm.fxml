@@ -32,13 +32,20 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainForm">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainForm">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="500.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="500.0" />
@@ -66,10 +73,10 @@
          <children>
             <TableView fx:id="partsTable" layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
               <columns>
-                <TableColumn fx:id="partIdColumn" prefWidth="75.0" text="Part ID" />
-                <TableColumn fx:id="partNameColumn" prefWidth="75.0" text="Part Name" />
-                  <TableColumn fx:id="partInventoryLevelColumn" prefWidth="104.0" text="Inventory Level" />
-                  <TableColumn fx:id="partPriceColumn" prefWidth="179.0" text="Price / Cost per Unit" />
+                <TableColumn fx:id="partIdColumn" prefWidth="74.0" text="Part ID" />
+                <TableColumn fx:id="partNameColumn" prefWidth="130.0" text="Part Name" />
+                  <TableColumn fx:id="partInventoryLevelColumn" prefWidth="100.0" text="Inventory Level" />
+                  <TableColumn fx:id="partPriceColumn" prefWidth="129.0" text="Price / Cost per Unit" />
               </columns>
             </TableView>
             <Label layoutX="14.0" layoutY="14.0" text="Parts">
@@ -104,10 +111,10 @@
          <children>
             <TableView fx:id="productsTable" layoutX="3.0" layoutY="33.0" prefHeight="176.0" prefWidth="435.0">
                <columns>
-                  <TableColumn fx:id="productIdColumn" prefWidth="75.0" text="Product ID" />
-                  <TableColumn fx:id="productNameColumn" prefWidth="91.0" text="Product Name" />
-                  <TableColumn fx:id="productInventoryLevelColumn" prefWidth="97.0" text="Inventory Level" />
-                  <TableColumn fx:id="productPriceColumn" minWidth="0.0" prefWidth="171.0" text="Price / Cost per Unit" />
+                  <TableColumn fx:id="productIdColumn" prefWidth="74.0" text="Product ID" />
+                  <TableColumn fx:id="productNameColumn" prefWidth="130.0" text="Product Name" />
+                  <TableColumn fx:id="productInventoryLevelColumn" prefWidth="100.0" text="Inventory Level" />
+                  <TableColumn fx:id="productPriceColumn" minWidth="0.0" prefWidth="129.0" text="Price / Cost per Unit" />
                </columns>
             </TableView>
             <Label layoutX="14.0" layoutY="12.0" text="Products">

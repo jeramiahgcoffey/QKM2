@@ -19,6 +19,10 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class which specifies logic for Modify Part screen.
+ * @author Jeramiah Coffey
+ */
 public class ModifyPart implements Initializable {
     public RadioButton modPartInHouse;
     public RadioButton modPartOutsourced;
@@ -36,22 +40,47 @@ public class ModifyPart implements Initializable {
     public Label modPartInvAlert;
     public Label modPartPriceAlert;
 
+    /**
+     * Static variable for storing an in-house Part object received from the Main Form.
+     */
     private static InHouse selectedInHousePart = null;
+
+    /**
+     * Static variable for storing an outsourced Part object received from the Main Form.
+     */
     private static Outsourced selectedOutsourcedPart = null;
+
+    /**
+     * Static variable for storing the index of the Part object received from the Main Form.
+     */
     private static int index;
 
+    /**
+     * Overloaded method for receiving the Part data from the Main Form.
+     * @param part the InHouse Part data
+     */
     public static void receiveSelectedPart(InHouse part){
         selectedInHousePart = part;
         selectedOutsourcedPart = null;
         index = Inventory.getAllParts().indexOf(part);
     }
 
+    /**
+     * Overloaded method for receiving the Part data from the Main Form.
+     * @param part the Outsourced part data
+     */
     public static void receiveSelectedPart(Outsourced part){
         selectedOutsourcedPart = part;
         selectedInHousePart = null;
         index = Inventory.getAllParts().indexOf(part);
     }
 
+    /**
+     * Initializes controller.
+     * Sets table values.
+     * @param url URL used to resolve paths, null if not known
+     * @param resourceBundle Resources used to localize the root object, null if not localized
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         if(selectedInHousePart != null) {
@@ -75,6 +104,9 @@ public class ModifyPart implements Initializable {
         }
     }
 
+    /**
+     * Handler for radio button change. Changes the text field label for Machine ID/Company Name.
+     */
     public void handleRadioChange() {
         if(modPartInHouse.isSelected()){
             modPartMIDCNLabel.setText("Machine ID");
@@ -83,6 +115,11 @@ public class ModifyPart implements Initializable {
         }
     }
 
+    /**
+     * Validates a string input as a positive integer.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isInteger(String str){
         if (str == null) {
             return false;
@@ -96,6 +133,11 @@ public class ModifyPart implements Initializable {
         return true;
     }
 
+    /**
+     * Validates a string input as a positive double/number.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isNumeric(String str){
         if (str == null) {
             return false;
@@ -109,6 +151,12 @@ public class ModifyPart implements Initializable {
         return true;
     }
 
+    /**
+     * Handler for Modify Part Save button. Validates input data from text fields, and sets visible any alerts needed depending on validation results.
+     * Upon validation, creates updates Part object (InHouse/Outsourced) in the Inventory.
+     * Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void handleSave(ActionEvent actionEvent) throws IOException {
         boolean validData = true;
         modPartNumericalAlert.setVisible(false);
@@ -179,6 +227,10 @@ public class ModifyPart implements Initializable {
         }
     }
 
+    /**
+     * Handler for Modify Part Cancel button. Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         selectedInHousePart = null;
         selectedOutsourcedPart = null;

@@ -18,6 +18,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class which specifies logic for Add Product screen.
+ * @author Jeramiah Coffey
+ */
 public class AddProduct implements Initializable {
     public TableView<Part> addProdAvailablePartsTable;
     public TableColumn<Number, Integer> addProdAvailablePartsId;
@@ -42,10 +46,21 @@ public class AddProduct implements Initializable {
     public Label addProdInvAlert;
     public Label addProdPriceAlert;
 
-
+    /**
+     * Static variable for generating unique Product IDs.
+     */
     private static int autoId = 1000;
+
+    /**
+     * List of current associated parts for a Product, initially empty upon instantiation.
+     */
     private final ObservableList<Part> currentParts = FXCollections.observableArrayList();
 
+    /**
+     * Initializes controller.
+     * @param url URL used to resolve paths, null if not known
+     * @param resourceBundle Resources used to localize the root object, null if not localized
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         searchAlertCheck(Inventory.getAllParts());
@@ -60,6 +75,10 @@ public class AddProduct implements Initializable {
         addProdCurrentPartsPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
     }
 
+    /**
+     * Checks for situations where an empty inventory or empty query results alert message needs to be displayed.
+     * @param queryResults list of results matching the query
+     */
     public void searchAlertCheck(ObservableList<Part> queryResults) {
         boolean emptyInventory = Inventory.getAllParts().isEmpty();
         boolean emptyQueryResults = queryResults.isEmpty();
@@ -67,6 +86,11 @@ public class AddProduct implements Initializable {
         addProdSearchAlert.setVisible(!emptyInventory && emptyQueryResults);
     }
 
+    /**
+     * Handles querying of the inventory of Parts.
+     * Sets table to the query results.
+     * Calls to searchAlertCheck passing in the query results.
+     */
     public void handlePartQuery() {
         String query = addProdAPQueryTF.getText();
         ObservableList<Part> results = FXCollections.observableArrayList();
@@ -83,14 +107,26 @@ public class AddProduct implements Initializable {
         searchAlertCheck(results);
     }
 
+    /**
+     * Handles the Add Associated Part button.
+     */
     public void handleAddAP() {
         Part selectedPart = addProdAvailablePartsTable.getSelectionModel().getSelectedItem();
-        if (selectedPart != null) {
+        if (selectedPart == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid");
+            alert.setContentText("No Part selected.");
+            alert.showAndWait();
+            return;
+        } else {
             currentParts.add(selectedPart);
         }
         addProdCurrentPartsTable.setItems(currentParts);
     }
 
+    /**
+     * Handles the Remove Associated Part button.
+     */
     public void handleRemAP() {
         Part selectedPart = addProdCurrentPartsTable.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
@@ -105,6 +141,11 @@ public class AddProduct implements Initializable {
         addProdCurrentPartsTable.setItems(currentParts);
     }
 
+    /**
+     * Validates a string input as a positive integer.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isInteger(String str){
         if (str == null) {
             return false;
@@ -118,6 +159,11 @@ public class AddProduct implements Initializable {
         return true;
     }
 
+    /**
+     * Validates a string input as a positive double/number.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isNumeric(String str){
         if (str == null) {
             return false;
@@ -131,6 +177,13 @@ public class AddProduct implements Initializable {
         return true;
     }
 
+    /**
+     * Handler for the Add Product Save button. Validates input data from text fields, and sets visible any alerts needed depending on validation results.
+     * Upon validation, creates new Product object and adds the object to the Inventory.
+     * Increments autoID.
+     * Redirects to main form.
+     * @param actionEvent the event which triggered the method
+     */
     public void handleSave(ActionEvent actionEvent) throws IOException {
         boolean validData = true;
         addProdNumericalAlert.setVisible(false);
@@ -188,6 +241,10 @@ public class AddProduct implements Initializable {
         }
     }
 
+    /**
+     * Handler for Add Product Cancel button. Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainForm.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();

@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 import model.InHouse;
 import model.Inventory;
@@ -19,8 +18,11 @@ import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller class which specifies logic for Add Part screen.
+ * @author Jeramiah Coffey
+ */
 public class AddPart implements Initializable {
-    public ToggleGroup addPart;
     public TextField addPartNameTF;
     public TextField addPartMinTF;
     public TextField addPartStockTF;
@@ -35,12 +37,23 @@ public class AddPart implements Initializable {
     public Label addPartInvAlert;
     public Label addPartPriceAlert;
 
+    /**
+     * Static variable for generating unique Part IDs.
+     */
     private static int autoId = 5;
 
+    /**
+     * Initializes controller.
+     * @param url URL used to resolve paths, null if not known
+     * @param resourceBundle Resources used to localize the root object, null if not localized
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
     }
 
+    /**
+     * Handler for radio button change. Changes the text field label for Machine ID/Company Name.
+     */
     public void handleRadioChange() {
         if(addPartInHouse.isSelected()){
             addPartMIDCNLabel.setText("Machine ID");
@@ -49,6 +62,11 @@ public class AddPart implements Initializable {
         }
     }
 
+    /**
+     * Validates a string input as a positive integer.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isInteger(String str){
         if (str == null) {
             return false;
@@ -62,6 +80,11 @@ public class AddPart implements Initializable {
         return true;
     }
 
+    /**
+     * Validates a string input as a positive double/number.
+     * @param str the string to validate
+     * @return boolean representing the result of validation
+     */
     public static boolean isNumeric(String str){
         if (str == null) {
             return false;
@@ -75,6 +98,13 @@ public class AddPart implements Initializable {
         return true;
     }
 
+    /**
+     * Handler for Add Part Save button. Validates input data from text fields, and sets visible any alerts needed depending on validation results.
+     * Upon validation, creates new Part object (InHouse/Outsourced) and adds the object to the Inventory.
+     * Increments autoID.
+     * Redirects to main form.
+     * @param actionEvent the event which triggered the method
+     */
     public void handleSave(ActionEvent actionEvent) throws IOException {
         boolean validData = true;
         addPartNumericalAlert.setVisible(false);
@@ -143,6 +173,10 @@ public class AddPart implements Initializable {
         }
     }
 
+    /**
+     * Handler for Add Part Cancel button. Redirects to Main Form.
+     * @param actionEvent the event which triggered the method
+     */
     public void toMainForm(ActionEvent actionEvent) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/MainForm.fxml")));
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
