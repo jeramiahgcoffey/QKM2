@@ -133,7 +133,7 @@
             <Insets left="25.0" />
          </GridPane.margin>
       </AnchorPane>
-      <Button mnemonicParsing="false" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <Button mnemonicParsing="false" onAction="#handleExit" text="Exit" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="350.0" />
          </GridPane.margin>
